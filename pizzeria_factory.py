@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-# Abstract Product class for all pizzas
+# Abstract Product (Generic Pizza)
 class Pizza(ABC):
     
     @abstractmethod
@@ -12,6 +12,42 @@ class Pizza(ABC):
     def get_name(self):
         """Get the name of the pizza"""
         pass
+
+# Abstract Creator (Generic Pizza Creator)
+class PizzaCreator(ABC):
+    
+    def order_pizza(self):
+        pizza = self.create_pizza()
+        
+        if pizza:
+            print(pizza.prepare())
+            print(f"{pizza.get_name()} coming right up!\n")
+            return pizza
+        else:
+            print("Unable to create pizza.\n")
+            return None
+    
+    @abstractmethod
+    # Factory Method
+    def create_pizza(self):
+        """Create a specific type of pizza"""
+        pass
+
+# Concrete Creators (Different Pizza Types)
+class CheesePizzaCreator(PizzaCreator):
+    
+    def create_pizza(self):
+        return CheesePizza()
+
+class PepperoniPizzaCreator(PizzaCreator):
+    
+    def create_pizza(self):
+        return PepperoniPizza()
+
+class SupremePizzaCreator(PizzaCreator):
+    
+    def create_pizza(self):
+        return SupremePizza()
 
 # Concrete Products
 class CheesePizza(Pizza):
@@ -38,42 +74,16 @@ class SupremePizza(Pizza):
     def get_name(self):
         return "Supreme Pizza"
 
-# Creator (Abstract)
-class Pizzeria(ABC):
-    
-    def order_pizza(self, pizza_type):
-        pizza = self.create_pizza(pizza_type)
-        
-        if pizza:
-            print(pizza.prepare())
-            print(f"{pizza.get_name()} coming right up!\n")
-            return pizza
-        else:
-            print("Invalid option, please try again.\n")
-            return None
-    
-    @abstractmethod
-    # Factory Method
-    def create_pizza(self, pizza_type):
-        pass
-
-# Concrete Creator
-class MansoorsPizzeria(Pizzeria):
-    
-    def create_pizza(self, pizza_type):
-        if pizza_type == "1":
-            return CheesePizza()
-        elif pizza_type == "2":
-            return PepperoniPizza()
-        elif pizza_type == "3":
-            return SupremePizza()
-        else:
-            return None
-
 # Client Code
 def main():
-    pizzeria = MansoorsPizzeria()
     print("Welcome to Mansoor's Pizzeria!\n")
+    
+    # Map user choices to concrete creators
+    pizza_creators = {
+        "1": CheesePizzaCreator(),
+        "2": PepperoniPizzaCreator(),
+        "3": SupremePizzaCreator()
+    }
     
     user_input = ""
     while user_input != "Exit":
@@ -87,8 +97,10 @@ def main():
         
         if user_input == "Exit":
             print("Goodbye! Thanks for visiting Mansoor's Pizzeria.\n")
+        elif user_input in pizza_creators:
+            pizza_creators[user_input].order_pizza()
         else:
-            pizzeria.order_pizza(user_input)
+            print("Invalid option, please try again.\n")
 
 if __name__ == "__main__":
     main()
