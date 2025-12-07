@@ -15,7 +15,6 @@ class Pizza(ABC):
 
 # Concrete Products
 class CheesePizza(Pizza):
-    """Concrete product: Cheese Pizza"""
     
     def prepare(self):
         return "Preparing Cheese Pizza with mozzarella and tomato sauce..."
@@ -24,7 +23,6 @@ class CheesePizza(Pizza):
         return "Cheese Pizza"
 
 class PepperoniPizza(Pizza):
-    """Concrete product: Pepperoni Pizza"""
     
     def prepare(self):
         return "Preparing Pepperoni Pizza with pepperoni, mozzarella, and tomato sauce..."
@@ -33,7 +31,6 @@ class PepperoniPizza(Pizza):
         return "Pepperoni Pizza"
 
 class SupremePizza(Pizza):
-    """Concrete product: Supreme Pizza"""
     
     def prepare(self):
         return "Preparing Supreme Pizza with pepperoni, sausage, peppers, onions, and olives..."
@@ -43,10 +40,8 @@ class SupremePizza(Pizza):
 
 # Creator (Abstract)
 class Pizzeria(ABC):
-    """Abstract creator class for pizzeria"""
     
     def order_pizza(self, pizza_type):
-        """Template method for ordering pizza"""
         pizza = self.create_pizza(pizza_type)
         
         if pizza:
@@ -58,16 +53,14 @@ class Pizzeria(ABC):
             return None
     
     @abstractmethod
+    # Factory Method
     def create_pizza(self, pizza_type):
-        """Factory method to be implemented by concrete creators"""
         pass
 
 # Concrete Creator
 class MansoorsPizzeria(Pizzeria):
-    """Concrete creator: Mansoor's Pizzeria implementation"""
     
     def create_pizza(self, pizza_type):
-        """Factory method implementation"""
         if pizza_type == "1":
             return CheesePizza()
         elif pizza_type == "2":
